@@ -215,6 +215,8 @@ class TestProductModel(unittest.TestCase):
         dic_pro["category"] = 7
         with self.assertRaises(DataValidationError):
             product.deserialize(dic_pro)
+        with self.assertRaises(DataValidationError):
+            product.deserialize({"name": "Test Product", "invalid_key": "invalid_value"})
 
     def test_find_by_price(self):
         """It should Find a Product by Price"""
@@ -227,3 +229,5 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found.count(), count)
         for product in found:
             self.assertEqual(product.price, price)
+        found = Product.find_by_price(str(price))
+        self.assertEqual(found.count(), count)
